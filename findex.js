@@ -1,9 +1,15 @@
 window.addEventListener('DOMContentLoaded', init);
 
 function init() {
-    // Create a scene, camera, renderer, and geometry as before
-    
-    // ...
+    // Create a scene, camera, and renderer as before
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Create the geometry for the globe
+    var geometry = new THREE.SphereGeometry(5, 32, 32);
 
     // Create a variable to store the mouse coordinates
     var mouse = { x: 0, y: 0 };
