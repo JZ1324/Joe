@@ -33,6 +33,8 @@ window.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('mousedown', handleMouseDown);
   document.addEventListener('mouseup', handleMouseUp);
 
+  let isDragging = false; // Declare the isDragging variable
+
   function handleMouseMove(event) {
     // Update the mouse coordinates based on the mouse movement
     mouse.x = event.clientX;
