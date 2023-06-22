@@ -8,13 +8,35 @@ function init() {
     // Create a variable to store the mouse coordinates
     var mouse = { x: 0, y: 0 };
 
+    // Create a variable to store the previous mouse position
+    var prevMouse = { x: 0, y: 0 };
+
+    // Create a variable to store the rotation speed
+    var rotationSpeed = 0.005;
+
+    // Create a variable to track if the mouse is being dragged
+    var isDragging = false;
+
+    // Start the idle rotation
+    var idleRotation = {
+        x: rotationSpeed,
+        y: rotationSpeed
+    };
+
+    // Load the Earth texture
+    var texture = new THREE.TextureLoader().load('https://jz1324.github.io/Earth/earth_texture.jpg');
+
+    // Create a material with the Earth texture
+    var material = new THREE.MeshBasicMaterial({ map: texture });
+
+    // Create a mesh with the geometry and material
+    var globe = new THREE.Mesh(geometry, material);
+    scene.add(globe);
+
     // Add event listeners for mouse movements
     document.addEventListener('mousemove', handleMouseMove);
     document.addEventListener('mousedown', handleMouseDown);
     document.addEventListener('mouseup', handleMouseUp);
-
-    // Prevent scrolling on the website
-    document.body.style.overflow = 'hidden';
 
     function handleMouseMove(event) {
         // Update the mouse coordinates based on the mouse movement
@@ -26,30 +48,45 @@ function init() {
         // Prevent default browser behavior to avoid text selection
         event.preventDefault();
 
-        // Add event listener for mouse movement while dragging
-        document.addEventListener('mousemove', handleDrag);
+        // Start dragging
+        isDragging = true;
+
+        // Store the initial mouse position
+        prevMouse.x = event.clientX;
+        prevMouse.y = event.clientY;
     }
 
     function handleMouseUp(event) {
-        // Remove the event listener for mouse movement while dragging
-        document.removeEventListener('mousemove', handleDrag);
+        // Stop dragging
+        isDragging = false;
     }
 
-    function handleDrag(event) {
+    // Create an animation loop to continuously render the scene
+    function animate() {
+        requestAnimationFrame(animate);
+
         // Calculate the distance moved by the mouse
-        var deltaX = event.clientX - mouse.x;
-        var deltaY = event.clientY - mouse.y;
+        var deltaX = mouse.x - prevMouse.x;
+        var deltaY = mouse.y - prevMouse.y;
 
-        // Update the globe's rotation based on the mouse movement
-        globe.rotation.y += deltaX * 0.01;
-        globe.rotation.x += deltaY * 0.01;
+        // Update the globe's rotation based on the mouse movement when dragging
+        if (isDragging) {
+            globe.rotation.y += deltaX * rotationSpeed;
+            globe.rotation.x += deltaY * rotationSpeed;
+        } else {
+            // Apply idle rotation when not dragging
+            globe.rotation.y += idleRotation.x;
+            globe.rotation.x += idleRotation.y;
+        }
 
-        // Update the mouse coordinates
-        mouse.x = event.clientX;
-        mouse.y = event.clientY;
+        // Update the previous mouse position
+        prevMouse.x = mouse.x;
+        prevMouse.y = mouse.y;
+
+        // Render the scene
+        renderer.render(scene, camera);
     }
 
-    // Render the scene as before
-
-    // ...
+    // Start the animation loop
+    animate();
 }
