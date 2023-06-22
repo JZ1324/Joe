@@ -17,7 +17,7 @@ function init() {
     var geometry = new THREE.SphereGeometry(1, 32, 32);
 
     // Create a material with a texture
-    var texture = new THREE.TextureLoader().load('earth_texture.jpg');
+    var texture = new THREE.TextureLoader().load('https://jz1324.github.io/Earth/earth_texture.jpg');
     var material = new THREE.MeshBasicMaterial({ map: texture });
 
     // Create a mesh with the geometry and material
